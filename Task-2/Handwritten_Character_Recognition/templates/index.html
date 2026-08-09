@@ -1,1 +1,1085 @@
+<!DOCTYPE html>
 
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>
+Handwritten Character Recognition
+</title>
+
+
+<style>
+
+/* =====================================================
+   GENERAL
+===================================================== */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+body {
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f8f9ff,
+            #eef2ff,
+            #f8f9ff
+        );
+
+    min-height: 100vh;
+
+    color: #333;
+}
+
+
+.container {
+
+    width: 92%;
+
+    max-width: 1200px;
+
+    margin: auto;
+
+    padding: 30px 0;
+}
+
+
+/* =====================================================
+   HERO
+===================================================== */
+
+.hero {
+
+    background:
+        linear-gradient(
+            135deg,
+            #667eea,
+            #764ba2
+        );
+
+    color: white;
+
+    padding: 50px 25px;
+
+    border-radius: 25px;
+
+    text-align: center;
+
+    margin-bottom: 30px;
+
+    box-shadow:
+        0 15px 35px
+        rgba(102,126,234,0.25);
+}
+
+
+.hero h1 {
+
+    font-size: 42px;
+
+    margin-bottom: 12px;
+}
+
+
+.hero p {
+
+    font-size: 18px;
+}
+
+
+/* =====================================================
+   CARD
+===================================================== */
+
+.card {
+
+    background: white;
+
+    padding: 25px;
+
+    border-radius: 20px;
+
+    margin-bottom: 25px;
+
+    box-shadow:
+        0 8px 25px
+        rgba(0,0,0,0.07);
+}
+
+
+.card h2 {
+
+    margin-bottom: 12px;
+}
+
+
+.card p {
+
+    color: #666;
+
+    line-height: 1.6;
+}
+
+
+/* =====================================================
+   FEATURES
+===================================================== */
+
+.section-title {
+
+    text-align: center;
+
+    margin:
+        30px 0 20px;
+}
+
+
+.features {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 20px;
+}
+
+
+.feature {
+
+    background: white;
+
+    padding: 25px;
+
+    border-radius: 18px;
+
+    text-align: center;
+
+    box-shadow:
+        0 7px 20px
+        rgba(0,0,0,0.06);
+}
+
+
+.feature-icon {
+
+    font-size: 40px;
+
+    margin-bottom: 10px;
+}
+
+
+.feature h3 {
+
+    margin-bottom: 8px;
+}
+
+
+.feature p {
+
+    color: #777;
+
+    font-size: 14px;
+}
+
+
+/* =====================================================
+   UPLOAD SECTION
+===================================================== */
+
+.upload-section {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 30px;
+
+    margin-top: 30px;
+}
+
+
+.upload-box {
+
+    background: white;
+
+    padding: 30px;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 8px 25px
+        rgba(0,0,0,0.07);
+}
+
+
+input[type="file"] {
+
+    width: 100%;
+
+    padding: 15px;
+
+    margin-top: 20px;
+
+    border:
+        2px dashed #667eea;
+
+    border-radius: 15px;
+
+    background: #f8f9ff;
+}
+
+
+button {
+
+    width: 100%;
+
+    margin-top: 20px;
+
+    padding: 15px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #667eea,
+            #764ba2
+        );
+
+    color: white;
+
+    font-size: 17px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+
+button:hover {
+
+    opacity: 0.9;
+}
+
+
+/* =====================================================
+   PREVIEW
+===================================================== */
+
+.preview {
+
+    text-align: center;
+
+    min-height: 300px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+}
+
+
+#previewImage {
+
+    max-width: 280px;
+
+    max-height: 280px;
+
+    margin-top: 15px;
+
+    border-radius: 15px;
+
+    box-shadow:
+        0 5px 20px
+        rgba(0,0,0,0.15);
+}
+
+
+/* =====================================================
+   RESULT
+===================================================== */
+
+.result {
+
+    display: none;
+
+    background:
+        linear-gradient(
+            135deg,
+            #667eea,
+            #764ba2
+        );
+
+    color: white;
+
+    padding: 35px;
+
+    border-radius: 22px;
+
+    text-align: center;
+
+    margin-top: 30px;
+}
+
+
+.prediction {
+
+    font-size: 75px;
+
+    font-weight: bold;
+
+    margin: 10px;
+}
+
+
+.confidence {
+
+    font-size: 20px;
+}
+
+
+/* =====================================================
+   PROBABILITIES
+===================================================== */
+
+.probabilities {
+
+    display: none;
+
+    background: white;
+
+    padding: 25px;
+
+    margin-top: 25px;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 8px 25px
+        rgba(0,0,0,0.07);
+}
+
+
+.probability-row {
+
+    display: grid;
+
+    grid-template-columns:
+        40px 1fr 80px;
+
+    gap: 10px;
+
+    align-items: center;
+
+    margin: 12px 0;
+}
+
+
+.bar {
+
+    height: 12px;
+
+    background: #e5e7eb;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+}
+
+
+.bar-fill {
+
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            #667eea,
+            #764ba2
+        );
+}
+
+
+/* =====================================================
+   LOADING
+===================================================== */
+
+.loading {
+
+    display: none;
+
+    text-align: center;
+
+    margin-top: 20px;
+
+    color: #667eea;
+
+    font-weight: bold;
+}
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+footer {
+
+    text-align: center;
+
+    padding: 30px;
+
+    color: #777;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media(max-width: 768px) {
+
+    .hero h1 {
+
+        font-size: 30px;
+    }
+
+
+    .hero p {
+
+        font-size: 15px;
+    }
+
+
+    .features {
+
+        grid-template-columns:
+            1fr 1fr;
+    }
+
+
+    .upload-section {
+
+        grid-template-columns:
+            1fr;
+    }
+}
+
+
+@media(max-width: 500px) {
+
+    .features {
+
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .hero {
+
+        padding: 35px 15px;
+    }
+
+
+    .prediction {
+
+        font-size: 60px;
+    }
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<div class="hero">
+
+    <h1>
+        ✍️ Handwritten Character Recognition
+    </h1>
+
+</div>
+
+
+<!-- =====================================================
+     ABOUT
+===================================================== -->
+
+<div class="card">
+
+    <h2>
+        🧠 About the Project
+    </h2>
+
+    <p>
+
+        This project uses a
+        <b>Machine Learning Neural Network</b>
+        trained on the MNIST dataset.
+
+        It recognizes handwritten digits
+        from 0 to 9.
+
+        Upload an image and the system
+        will predict the digit automatically.
+
+    </p>
+
+</div>
+
+
+<!-- =====================================================
+     FEATURES
+===================================================== -->
+
+<h2 class="section-title">
+
+    ✨ Key Features
+
+</h2>
+
+
+<div class="features">
+
+
+<div class="feature">
+
+    <div class="feature-icon">
+        🧠
+    </div>
+
+    <h3>
+        MLP Model
+    </h3>
+
+    <p>
+        Neural network based recognition
+    </p>
+
+</div>
+
+
+<div class="feature">
+
+    <div class="feature-icon">
+        🖼️
+    </div>
+
+    <h3>
+        Image Processing
+    </h3>
+
+    <p>
+        Automatic image preprocessing
+    </p>
+
+</div>
+
+
+<div class="feature">
+
+    <div class="feature-icon">
+        🎯
+    </div>
+
+    <h3>
+        Prediction
+    </h3>
+
+    <p>
+        Recognizes digits 0 to 9
+    </p>
+
+</div>
+
+
+<div class="feature">
+
+    <div class="feature-icon">
+        📊
+    </div>
+
+    <h3>
+        Confidence
+    </h3>
+
+    <p>
+        Shows prediction probability
+    </p>
+
+</div>
+
+
+</div>
+
+
+<!-- =====================================================
+     UPLOAD
+===================================================== -->
+
+<div class="upload-section">
+
+
+<div class="upload-box">
+
+    <h2>
+        📤 Upload Image
+    </h2>
+
+    <p>
+        Upload a handwritten digit image.
+    </p>
+
+
+    <input
+        type="file"
+        id="imageInput"
+        accept=".png,.jpg,.jpeg"
+    >
+
+
+    <button
+        onclick="predictDigit()">
+
+        🎯 Predict Digit
+
+    </button>
+
+
+    <div
+        class="loading"
+        id="loading">
+
+        🔄 Processing image...
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     PREVIEW
+===================================================== -->
+
+<div class="upload-box preview">
+
+    <h2>
+        🖼️ Image Preview
+    </h2>
+
+
+    <p id="previewText">
+
+        No image uploaded
+
+    </p>
+
+
+    <img
+        id="previewImage"
+        style="display:none;"
+    >
+
+</div>
+
+
+</div>
+
+
+<!-- =====================================================
+     RESULT
+===================================================== -->
+
+<div
+    class="result"
+    id="result">
+
+
+    <h2>
+        🎯 Prediction Result
+    </h2>
+
+
+    <div
+        class="prediction"
+        id="prediction">
+
+        -
+
+    </div>
+
+
+    <div class="confidence">
+
+        🎯 Confidence:
+
+        <b id="confidence">
+            0%
+        </b>
+
+    </div>
+
+
+</div>
+
+
+<!-- =====================================================
+     PROBABILITIES
+===================================================== -->
+
+<div
+    class="probabilities"
+    id="probabilities">
+
+
+    <h2>
+        📊 Prediction Probabilities
+    </h2>
+
+
+    <div id="probabilityList">
+
+    </div>
+
+
+</div>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+</div>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+
+/* =====================================================
+   IMAGE PREVIEW
+===================================================== */
+
+document
+.getElementById("imageInput")
+.addEventListener(
+    "change",
+    function() {
+
+
+        const file =
+            this.files[0];
+
+
+        if (!file) {
+
+            return;
+
+        }
+
+
+        const reader =
+            new FileReader();
+
+
+        reader.onload =
+            function(event) {
+
+
+                const image =
+                    document.getElementById(
+                        "previewImage"
+                    );
+
+
+                image.src =
+                    event.target.result;
+
+
+                image.style.display =
+                    "block";
+
+
+                document.getElementById(
+                    "previewText"
+                ).textContent =
+                    "Uploaded handwritten image";
+
+            };
+
+
+        reader.readAsDataURL(
+            file
+        );
+
+    }
+);
+
+
+/* =====================================================
+   PREDICT DIGIT
+===================================================== */
+
+function predictDigit() {
+
+
+    const input =
+        document.getElementById(
+            "imageInput"
+        );
+
+
+    if (
+        input.files.length === 0
+    ) {
+
+        alert(
+            "Please upload an image first."
+        );
+
+        return;
+
+    }
+
+
+    const file =
+        input.files[0];
+
+
+    const formData =
+        new FormData();
+
+
+    formData.append(
+        "image",
+        file
+    );
+
+
+    /* Show loading */
+
+    document.getElementById(
+        "loading"
+    ).style.display =
+        "block";
+
+
+    document.getElementById(
+        "result"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "probabilities"
+    ).style.display =
+        "none";
+
+
+    /* Send image to Flask */
+
+    fetch(
+        "/predict",
+        {
+
+            method: "POST",
+
+            body: formData
+
+        }
+    )
+
+
+    .then(
+        response =>
+            response.json()
+    )
+
+
+    .then(
+        data => {
+
+
+            document.getElementById(
+                "loading"
+            ).style.display =
+                "none";
+
+
+            if (
+                !data.success
+            ) {
+
+                alert(
+                    data.error
+                );
+
+                return;
+
+            }
+
+
+            /* Prediction */
+
+            document.getElementById(
+                "prediction"
+            ).textContent =
+                data.prediction;
+
+
+            /* Confidence */
+
+            document.getElementById(
+                "confidence"
+            ).textContent =
+                data.confidence + "%";
+
+
+            /* Show result */
+
+            document.getElementById(
+                "result"
+            ).style.display =
+                "block";
+
+
+            /* ======================================
+               PROBABILITIES
+            ====================================== */
+
+            const list =
+                document.getElementById(
+                    "probabilityList"
+                );
+
+
+            list.innerHTML = "";
+
+
+            data.probabilities
+            .forEach(
+                function(
+                    probability,
+                    digit
+                ) {
+
+
+                    const row =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    row.className =
+                        "probability-row";
+
+
+                    row.innerHTML = `
+
+                        <b>
+                            ${digit}
+                        </b>
+
+                        <div class="bar">
+
+                            <div
+                                class="bar-fill"
+                                style="
+                                    width:
+                                    ${probability}%;
+                                "
+                            >
+                            </div>
+
+                        </div>
+
+                        <span>
+                            ${probability}%
+                        </span>
+
+                    `;
+
+
+                    list.appendChild(
+                        row
+                    );
+
+                }
+            );
+
+
+            document.getElementById(
+                "probabilities"
+            ).style.display =
+                "block";
+
+
+        }
+    )
+
+
+    .catch(
+        function(error) {
+
+
+            document.getElementById(
+                "loading"
+            ).style.display =
+                "none";
+
+
+            alert(
+                "Error connecting to Flask server."
+            );
+
+
+            console.error(
+                error
+            );
+
+        }
+    );
+
+}
+
+</script>
+
+
+</body>
+
+</html>
